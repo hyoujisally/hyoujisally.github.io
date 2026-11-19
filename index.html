@@ -145,14 +145,6 @@
           <p class="paren" id="p-sub"></p>
           <p class="opus" id="p-no"></p>
         </header>
-        <div class="p-feature" id="p-feature" hidden></div>
-        <div class="line">
-          <div class="tempo-row">
-            <p class="tempo">Adagio cantabile<span class="mm">(<span class="music">&#x2669;</span> = 40)</span></p>
-            <button id="play" class="brace literal" type="button" aria-pressed="false"><span class="b">{</span><span class="label">Play</span><span class="b">}</span></button>
-          </div>
-          <canvas id="line1" role="img" aria-label="Engraved score, the opening bars of the second movement of Beethoven’s Pathétique sonata."></canvas>
-        </div>
         <section class="p-info" aria-label="Project details">
           <dl class="p-facts" id="p-facts"></dl>
           <div class="p-intro" id="p-intro"></div>
@@ -171,17 +163,12 @@
       <article class="page right" aria-label="Project write-up">
         <canvas class="shade" aria-hidden="true"></canvas>
         <div class="right-inner">
-          <div class="snap-top" aria-hidden="true"></div>
-          <canvas class="ornament right-orn" aria-hidden="true"></canvas>
-          <!-- the frame: pictures and live pieces for the section being read (Works only) -->
-          <div class="stage" id="stage" aria-live="polite">
-            <div class="stage-card">
-              <div class="stage-frame">
-                <div class="stage-view"></div>
-                <canvas class="stage-grain" aria-hidden="true"></canvas>
-                <p class="stage-cap" id="stage-cap"></p>
-              </div>
+          <div class="line">
+            <div class="tempo-row">
+              <p class="tempo">Adagio cantabile<span class="mm">(<span class="music">&#x2669;</span> = 40)</span></p>
+              <button id="play" class="brace literal" type="button" aria-pressed="false"><span class="b">{</span><span class="label">Play</span><span class="b">}</span></button>
             </div>
+            <canvas id="line1" role="img" aria-label="Engraved score, the opening bars of the second movement of Beethoven’s Pathétique sonata."></canvas>
           </div>
           <div class="slot" id="writeup"></div>
           <nav class="turn-page" aria-label="More pieces">
@@ -202,9 +189,6 @@
     <div class="hc-body"></div>
   </div>
 
-  <svg class="defs" width="0" height="0" aria-hidden="true" style="position:absolute">
-    <filter id="stage-distort"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G"/></filter>
-  </svg>
   <canvas class="turn" aria-hidden="true"></canvas>
   <div class="turn-grain" aria-hidden="true"></div>
 </main>

@@ -11,7 +11,6 @@ const coverShades = [...coverEl.querySelectorAll('canvas.shade')].map(c => surfa
 const PULSE = { boilAmp: ORNAMENT_PULSE, flicker: ORNAMENT_FLICKER };   // the ornaments shimmer more visibly than the text
 const ornament = surface(coverEl.querySelector('canvas.ornament'), 'ornament', 2.2, PULSE);
 const projOrnament = surface(projectEl.querySelector('canvas.proj-ornament'), 'ornament', 2.2, PULSE);
-const rightOrnament = surface(projectEl.querySelector('canvas.right-orn'), 'ornament', 2.2, PULSE);
 const aboutText = [...aboutEl.querySelectorAll('.ink-text')].map(e => inkSurface(e));
 const aboutShades = [...aboutEl.querySelectorAll('canvas.shade')].map(c => surface(c, 'shade', 0.001, { drawn: false }));
 const aboutOrnament = surface(aboutEl.querySelector('canvas.ornament'), 'ornament', 2.2, PULSE);

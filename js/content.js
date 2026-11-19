@@ -41,10 +41,9 @@ const PROJECTS = [
 const ABOUT = {
   title: 'About',
   paragraphs: [
-    'Hello, my name is Hyouji (or Sally) Joo. I’d like to describe myself as a data-driven thinker with a creative heart and a passion for empathetic design.', 
-    'I love finding the stories behind numbers, understanding how people think, and translating abstract ideas into intuitive, meaningful, and empathetic digital experiences;',
-    'I believe that anything can be an experience, as long as the designer correctly balances operational efficiency, user needs, and creative inidulgence.',
-    'Beyond design, I am a music enthusiast, art lover, and a hobby collector.',
+    'Hello, my name is Hyouji (or Sally) Joo. I’d like to describe myself as a data-driven thinker with a creative heart and a passion for empathetic design. I love finding the stories behind numbers, understanding how people think, and translating abstract ideas into intuitive, meaningful, and empathetic digital experiences.',
+    'Beyond design, I am a music enthusiast (as you can see from the music score page design), art lover, and a hobby collector.',
+    'I think of the music score as a metaphor for how projects of different natures can form a cohesive story, similar to how there are multiple movements in a musical piece.'
   ]
 };
 
@@ -154,7 +153,6 @@ DETAILS['creative-1'] = {
 };
 
 DETAILS['creative-2'] = {
-  pdf: 'images/body/magazine.pdf',          // shown under the title on the left page; put the file here (or change the path)
   cover: 'images/body/magazine/1.png',
   panels: [
     { h: 'The Chronology of the Disobedient Body', p: [
@@ -321,33 +319,6 @@ DETAILS['work-6'] = {
   ]
 };
 
-// ---- creative-3: Magazine Templates and Layouts ----
-// The left page shows the spreads in a two-page frame, one at a time. Add them in order, for example:
-//   { src: 'images/magazine/spread-1.png', cap: 'Cover and contents' },
-DETAILS['creative-3'] = {
-  spreads: []
-};
-
-// ---- creative-4: Film Analysis ----
-// The left page shows a film's poster and details; the right page lists the papers, one dropdown per film.
-// Opening a paper's dropdown shows its film on the left. Posters go in images/film/ (see poster: below).
-DETAILS['creative-4'] = {
-  films: [
-    { id: 'tar', title: 'TÁR', director: 'Todd Field', year: 2022, poster: 'images/film/tar-poster.jpg',
-      blurb: 'Lydia Tár, the celebrated chief conductor of a major German orchestra, controls every detail of her world, until it begins to come apart around her.' },
-    { id: 'return-to-seoul', title: 'Return to Seoul', director: 'Davy Chou', year: 2022, poster: 'images/film/return-to-seoul-poster.jpg',
-      blurb: 'Freddie, a Korean adoptee raised in France, makes a spontaneous trip to Seoul and begins searching for her birth parents, setting off years of reinvention.' }
-  ],
-  panels: [
-    { h: 'TÁR', film: 'tar', fold: true, open: false,
-      p: ['Commentary: how sudden, uncontrolled noise tracks Lydia Tár’s loss of control and her psychological unraveling.'],
-      panels: [{ pdf: 'images/film/tar-commentary.pdf', pdfLabel: 'Open the paper' }] },
-    { h: 'Return to Seoul', film: 'return-to-seoul', fold: true, open: false,
-      p: ['Final paper: rereading Freddie’s placelessness through the film’s music and Mia Mingus’s speech on belonging.'],
-      panels: [{ pdf: 'images/film/return-to-seoul-final.pdf', pdfLabel: 'Open the paper' }] }
-  ]
-};
-
 // ---- work-1: Warner Music Group ----
 // The two systems are folds: { fold: true, p: [summary that always shows], open: false, panels: [sections inside] }.
 // Click a heading to open or close its sections. Set open: true to start one open.
@@ -358,12 +329,11 @@ DETAILS['work-1'] = {
         ['Role', 'Digital Operations Intern, Emerging Talent Associate'],
         ['Location', 'Los Angeles'],
         ['Timing', 'Summer 2026'],
-        ['Team', 'Warner Recorded Music Global Operations (WRMGO) - Digital Specialty Products'],
+        ['Team', 'Digital Specialty Products'],
         ['Tools', 'Snowflake SQL, Python, R (tidymodels), Google Apps Script, Google Cloud (Workflows, Cloud Functions, Vertex AI), Gmail and Chat APIs']
       ],
       p: [
-        'At Warner Music Group, I spent most of my internship building automation for the Digital Specialty Products team, whose YouTube claiming work relied on manual sheet-checking and chasing missing information. I designed and prototyped two systems to move that work into the background, and tested both end to end with sample data.', 
-        'Alongside them, I queried and joined digital asset datasets with 1M+ rows in Snowflake to build custom reports for label requests, and automated recurring metadata reports with Python.'
+        'At Warner Music Group, I spent most of my internship building automation for the Digital Specialty Products team, whose YouTube claiming work relied on manual sheet-checking and chasing missing information. I designed and prototyped two systems to move that work into the background, and tested both end to end with sample data. Alongside them, I queried and joined digital asset datasets with 1M+ rows in Snowflake to build custom reports for label requests, and automated recurring metadata reports with Python.'
       ] },
 
     { h: 'Atlantic Unclaimed Video Autoalert System', fold: true, open: false,
@@ -416,7 +386,7 @@ DETAILS['work-1'] = {
           list: [
             { t: 'Automated reports', items: [
                 'Each week, a Google Cloud Python function runs the risk scan query in Snowflake.',
-                'The generated report is saved in the designated Google Drive folder.'
+                'The report is saved in the designated Google Drive folder.'
               ] },
             { t: 'Google Sheet review tracker', items: [
                 'The risk report is loaded into a Google Sheet, where reviewers mark each claim request as parasitic or legitimate.',
@@ -591,19 +561,15 @@ DETAILS['work-3'] = {
         { t: 'Bridges', items: ['The lines connecting distant life moments.'] },
         { t: 'Recurring signals', items: ['Sensory cues that repeat across memories.'] }
       ] },
-    { h: 'Our User Problem', p: [
-        'When thinking back to the time on the playground as a child, do you remember the exact steps of what you did there? You might not, because memories are rarely recalled through sequential logic.',
-        'People remember moments through sensory cues and emotions, but the digital and physical tools we have only record the objective details of a moment, making it hard to recognize patterns in the moments that bring comfort, joy, or connection. Another barrier is that emotions such as nostalgia are abstract and difficult to quantify, so they are often undertracked and underrepresented in existing tools.',
-        'With the theme of sensory experiences, we decided to explore how to qualitatively measure or track memories. The focus of our product was not to act as an interpreter between complex and abstract feelings, but to give users autonomy in defining their own experiences, so they can understand their own emotional patterns and the sensory cues that trigger nostalgia.',
-        'We wanted to help users recognize the patterns behind both positive and negative experiences without necessarily having to “re-experience” them.',
-      ] },
-  { h: 'Emotion and Color System: Designing with Color Psychology', p: [
+    { h: 'Emotion and Color System: Designing with Color Psychology', p: [
+        'Our team based our design on color psychology, which explains our tendency to associate certain colors with specific emotions.',
+        'Pixar’s Inside Out is a primary example of how effective color theory is in visual understanding.',
         'Using colors we culturally associate with certain emotions (e.g., blue as sadness) proves to be effective in communicating abstract feelings to a wide audience.',
         'This influenced our approach of mapping emotions to multi-colored constellations.',
         'There are six base emotions: joyful, peaceful, nostalgic, melancholy, anxious, and bitter.',
         'Up to three can blend into a single orb, giving 41 combinations: 6 singles, 15 pairs, and 20 triplets.',
         'You can also add your own color. The mood interpreter assigns it a name and a description based on color psychology, and you can regenerate the description for a different take.'
-      ] },      
+      ] },
     { figs: [
         { fig: 'The six emotion orbs', cap: 'The six base emotions, each with its own color and icon.', src: 'images/polaris/emotion-orbs.png', alt: 'Six emotion orbs with their corresponding colors and icons' },
         { fig: 'Your own emotional color', cap: 'Pick any color, and the mood interpreter describes it using color psychology.', src: 'images/polaris/make_color.png', alt: 'Custom color picker with a lavender circle and a mood interpretation reading “Calm & Reflective”, with a Regenerate button' }
@@ -814,6 +780,7 @@ DETAILS['work-6'].terms = {
   'Betweenness centrality': 'How often a node lies on the shortest paths between other nodes in a network. Nodes with high betweenness act as bridges, connecting groups that would otherwise be far apart.'
 };
 DETAILS['work-1'].terms = {
+  Parasitic: 'Fraudulent.',
   Fingerprint: 'An audio fingerprint: a compact digital summary of a recording’s sound. Labels submit fingerprints of their recordings to YouTube, and uploads whose audio matches are identified automatically.',
   Claim: 'A demand for ownership credit and revenue from an asset, such as a sound recording. On YouTube, a claim is placed on an upload whose audio matches a label’s fingerprint.',
   'Statistical models': 'Logistic Regression: estimates the probability that a claim is parasitic from a weighted combination of its features.\n\nRandom Forest: combines many decision trees, each trained on a random sample of the data, and takes their majority vote.\n\nXGBoost: builds decision trees one after another, each correcting the errors of the ones before it.'
@@ -821,36 +788,35 @@ DETAILS['work-1'].terms = {
 
 const INFO = {
   'work-1': [['Skills', 'Workflow automation, SQL reporting, classification modeling, systems design']],
-  'work-2': [['Role', 'UX Designer'], ['Timing', '2026'], ['Team', 'Kaytie Chung, Christine Shin, Jaimie Chun, Sally Joo'], ['Client', 'Intuit, Credit Karma'],
+  'work-2': [['Role', '[your role]'], ['Timing', '2026'], ['Team', 'Kaytie Chung, Christine Shin, Jaimie Chun, Sally Joo'], ['Client', 'Intuit, Credit Karma'],
              ['Skills', 'Survey design, statistical analysis, persona development, UX design, prototyping'], ['Tools', 'R, [tools]']],
   'work-3': [['Skills', 'Concept development, UI design, wireframing, prototyping']],
   'work-4': [['Timing', '2026'],
              ['Skills', 'Observation, interviewing, research synthesis, usability testing'],
-             ['Tools', 'user interviews, surveys, journey mapping, concept matrix, specification chart, scaled mockups, full-scale prototype']],
-  'work-5': [['Role', 'UX Designer'], ['Timing', '2025'], ['Team', 'Sally (Hyouji) Joo, Sharini Rahman, Brady Kamali, Yitian Zhang'], ['Skills', 'Needs-finding, prototyping, usability testing'], ['Tools', 'Figma, Sketch, Canva'], ['Context', 'HCI course, Group #2']],
-  'work-6': [['Timing', '2026'], ['Skills', 'Data visualization, UX design, social network analysis'], ['Tools', 'R, Python (NetworkX, lyricsgenius), Genius API, Gephi, HTML, CSS']],
-  'creative-1': [['Subject', 'Live event photography, editing']],
-  'creative-2': [['Role', 'Designer and art director'], ['Timing', '2026'], ['Skills', 'Fashion design, art direction, rendering, prototyping'], ['Tools', 'Clo3D, Adobe InDesign, Blender']],
-  'creative-3': [['Role', 'Graphic Designer'], ['Timing', '2026'], ['Skills', 'Layout, typography, branding, visual design, digital design'], ['Tools', 'Adobe Illustrator, Adobe Photoshop, Adobe InDesign, Figma']],
-  'creative-4': [['Skills', 'Film analysis, visual storytelling']]
+             ['Tools', '[the tools you used]']],
+  'work-5': [['Role', '[your role]'], ['Timing', '2025'], ['Team', 'Sally (Hyouji) Joo, Sharini Rahman, Brady Kamali, Yitian Zhang'], ['Skills', 'Needs-finding, prototyping, usability testing'], ['Tools', '[tools]'], ['Context', 'HCI course, Group #2']],
+  'work-6': [['Role', '[your role]'], ['Timing', '[years]'], ['Skills', 'Data visualization, UX design, social network analysis, [skills]'], ['Tools', 'R, Python (NetworkX, lyricsgenius), Genius API, HTML, CSS, [tools]']],
+  'creative-1': [['Role', 'Photographer'], ['Timing', '[years]'], ['Skills', 'Live event photography, editing'], ['Tools', '[camera and editing software]']],
+  'creative-2': [['Role', 'Designer and art director'], ['Timing', '[year]'], ['Skills', 'Fashion design, art direction, [skills]'], ['Tools', '[tools]']],
+  'creative-3': [['Role', 'Designer'], ['Timing', '[year]'], ['Skills', 'Layout, typography, [skills]'], ['Tools', '[tools]']],
+  'creative-4': [['Role', '[your role]'], ['Timing', '[year]'], ['Skills', 'Film analysis, visual storytelling'], ['Tools', '[tools]']]
 };
-
 Object.keys(INFO).forEach(id => { DETAILS[id] = Object.assign(DETAILS[id] || {}, { info: INFO[id] }); });
 
 // ---------------------------------------------------------------------
 // PART 3: fallback panels (shown for projects with no DETAILS entry)
 // ---------------------------------------------------------------------
 const WORK_PANELS = [
-  { h: 'Project overview', p: [''] },
-  { h: 'Research and observations', p: [''] },
+  { h: 'Project overview', p: ['Who the users were, what problem they faced, and the evidence that showed it was worth solving.'] },
+  { h: 'Research and observations', p: ['The methods you used (interviews, surveys, usability sessions, analytics) and what you observed. State the sample size and the finding that shaped the direction.'] },
   { fig: 'Research artifact', cap: 'An affinity map, interview synthesis, or data chart that supports the finding above.' },
   { h: 'Design decisions and rationale', p: ['For each major decision: what you chose, the alternatives you considered, and the observation or test result that justified the choice.'] },
-  { h: 'Testing and iteration', p: [''] },
-  { h: 'Outcome and reflection', p: [''] }
+  { h: 'Testing and iteration', p: ['How you tested (task, participants, metrics), what failed or confused users, and what you changed in response.'] },
+  { h: 'Outcome and reflection', p: ['Measured results (task success, time on task, user feedback) and what you would test next.'] }
 ];
 const CREATIVE_PANELS = [
-  { h: 'Project overview', p: [''] },
+  { h: 'Project overview', p: ['What you set out to explore, the constraints you worked within, and the references or observations that shaped the brief.'] },
   { fig: 'Process and iterations', cap: 'Sketches, drafts, or versions showing how the work developed.' },
-  { h: 'Decisions and feedback', p: [''] },
-  { fig: 'Final piece', cap: '' }
+  { h: 'Decisions and feedback', p: ['The choices you made at each stage, the critique or testing that informed them, and what you revised as a result.'] },
+  { fig: 'Final piece', cap: 'The finished work, with a note on which decisions are visible in it.' }
 ];

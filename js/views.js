@@ -13,7 +13,7 @@ function el(tag, cls, text) {
 
 // ---------- graphite shading around a box (the Works menu, the hover previews) ----------
 // Fine dots, densest right at the box's edge, fading out a little way beyond it and a short way inside it.
-function drawEdgeGrain(cv, bw, bh, out, inn, soft = false) {
+function drawEdgeGrain(cv, bw, bh, out, inn) {
   const w = bw + out * 2, h = bh + out * 2;
   const dpr = Math.min(window.devicePixelRatio || 1, 2), g = cv.getContext('2d');
   cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
@@ -25,7 +25,7 @@ function drawEdgeGrain(cv, bw, bh, out, inn, soft = false) {
     const dx = Math.max(out - x, x - (out + bw), 0), dy = Math.max(out - y, y - (out + bh), 0);
     const outside = Math.hypot(dx, dy), inside = Math.min(x - out, out + bw - x, y - out, out + bh - y);
     let d;
-    if (outside > 0) d = outside < out ? (soft ? 0.38 * Math.pow(1 - outside / out, 1.5) : 0.55 * Math.pow(1 - outside / out, 2.2)) : 0;
+    if (outside > 0) d = outside < out ? 0.55 * Math.pow(1 - outside / out, 2.2) : 0;
     else d = inside < inn ? 0.4 * Math.pow(1 - inside / inn, 2) : 0.015;   // a little paper grain inside
     if (Math.random() < d * 0.25) tones[d > 0.35 ? 2 : d > 0.12 ? 1 : 0].push(x + Math.random() * 0.5, y + Math.random() * 0.5, 0.22 + 0.22 * Math.random());
   }
@@ -121,7 +121,7 @@ function linkTerms(node, text) {
     });
     if (!best) break;
     if (best.m.index) node.append(document.createTextNode(text.slice(0, best.m.index)));
-    const r = makeRef(best.m[0], { items: [], def: { term: best.term, text: best.def } }); r.classList.add('term'); node.append(r);
+    node.append(makeRef(best.m[0], { items: [], def: { term: best.term, text: best.def } }));
     termsLeft = termsLeft.filter(([t]) => t !== best.term);
     text = text.slice(best.m.index + best.m[0].length);
   }
@@ -234,14 +234,6 @@ function blockFor(panel) {
   if (panel.grid && panel.figs) { b.classList.add('pictures'); b.append(photoGrid(panel.figs, panel.grid === 'whole')); return b; }
   if (panel.fig || panel.figs) { b.classList.add('pictures'); b.append(pictureLine(panel)); return b; }
   if (panel.fold) return foldBlock(panel);
-  if (panel.pdf) {                                       // pdf: 'path.pdf' shows the document in the page
-    b.classList.add('pdf-block');
-    const o = el('object', 'pdf-embed'); o.data = panel.pdf; o.type = 'application/pdf';
-    o.append(Object.assign(el('a', 'ext-link', 'Open the PDF ↗'), { href: panel.pdf, target: '_blank', rel: 'noopener' }));
-    const line = el('p', 'ref-line'); line.append(Object.assign(el('a', 'ext-link', (panel.pdfLabel || 'Open the paper') + ' ↗'), { href: panel.pdf, target: '_blank', rel: 'noopener' }));
-    b.append(o, line);
-    return b;
-  }
   const h3 = el('h3', panel.sub ? 'sub' : 'grain-full');   // sub: true makes a subsection heading, in clean ink rather than dotted grain
   if (!panel.p && !panel.list && !panel.facts && !panel.embed && !panel.link) b.classList.add('head-only');   // a heading over subsections
   if (panel.src || panel.img) {                         // the heading itself previews the section's picture
@@ -256,10 +248,8 @@ function blockFor(panel) {
 }
 // A dropdown: the heading and its one-line summary always show; the sections inside open and close.
 let foldCount = 0;
-const SHOW_FOLD_BARS = false;   // true puts the music lines back above the dropdowns on the right page
 function foldBlock(panel) {
   const b = el('div', 'block fold'), id = 'fold-' + (foldCount++), open = !!panel.open;
-  if (panel.film) b.dataset.film = panel.film;
   const head = el('div', 'fold-head');
   const h3 = el('h3', 'grain-full fold-title', panel.h);
   const btn = el('button', 'brace literal fold-toggle');
@@ -267,7 +257,7 @@ function foldBlock(panel) {
   btn.setAttribute('aria-expanded', String(open)); btn.setAttribute('aria-controls', id);
   btn.append(el('span', 'b', '{'), el('span', 'label', open ? 'Close' : 'Open'), el('span', 'caret', open ? '\u25B4' : '\u25BE'), el('span', 'b', '}'));
   head.append(h3, btn);
-  if (panel.bar !== undefined && SHOW_FOLD_BARS) {       // bar: n puts a line of the music above the dropdown (off: all the music is on the left page)
+  if (panel.bar !== undefined) {                         // bar: n puts a line of the music above the dropdown (the nth line)
     const cv = el('canvas', 'music-bar');
     cv.dataset.bar = panel.bar; cv.setAttribute('aria-hidden', 'true');
     b.append(cv);
@@ -290,7 +280,6 @@ function foldBlock(panel) {
 // The facts and the introduction live here, so they can be checked at any point while reading.
 const FACT_LINE = /^([A-Z][\w’'&\/ ]{1,26}):\s*(.+)$/;
 const FACT_ORDER = ['role', 'timing', 'team', 'skills', 'tools'];          // every project lists these first, in this order
-const FACT_SHOW = ['role', 'timing', 'team', 'skills', 'tools', 'client', 'location'];   // the facts on a Work's left page; the rest are told in the write-up
 const FACT_ALIAS = { 'built with': 'Tools', 'tools used': 'Tools' };
 function orderFacts(facts, info) {
   const list = [];
@@ -332,22 +321,13 @@ function fillProject(p) {
   const all = d.panels || (p.group === 'Creatives' ? CREATIVE_PANELS : WORK_PANELS);
   const { facts, panels } = splitOverview(d, all);
 
-  // left page: title, type, number, facts, introduction. Creative pieces show only the title and the introduction.
-  projectEl.classList.toggle('is-work', p.group === 'Works');
-  projectEl.classList.toggle('is-creative', p.group !== 'Works');
-  projectEl.classList.toggle('is-viz', p.id === 'work-6');
-  const h1 = $('#p-title');
-  h1.replaceChildren();
-  if (d.embed) {                                        // the title itself opens the live site (and previews it on hover)
-    const a = makeRef(p.title, { items: [{ embed: d.embed, cap: 'The live site' }] }, 'a');
-    a.classList.add('title-link'); a.href = d.embed; a.target = '_blank'; a.rel = 'noopener noreferrer';
-    h1.append(a, el('span', 'title-arrow', ' \u2197'));
-  } else h1.textContent = p.title;
+  // left page: title (previews the cover if there is one), type, number, facts, introduction
+  $('#p-title').textContent = p.title;
   $('#p-sub').textContent = '(' + p.type + ')';
   $('#p-no').textContent = p.group === 'Works' ? p.no : p.group === 'Creatives' ? 'Creatives, ' + p.no : '';
   const dl = $('#p-facts');
   dl.replaceChildren();
-  (p.group === 'Works' ? facts.filter(([k]) => FACT_SHOW.includes((k || '').toLowerCase())) : []).forEach(([k, v]) => {
+  facts.forEach(([k, v]) => {
     const dd = richText(el('dd', k ? (/^\[/.test(v) ? 'todo' : null) : 'solo'), v);   // [placeholders] are set in soft italics
     if (k) dl.append(el('dt', null, k), dd); else dl.append(dd);
   });
@@ -358,14 +338,13 @@ function fillProject(p) {
   if (lede && !/[.!?]["”’]?$/.test(lede.trim())) {           // a short, title-like line: set it as a subtitle, then the summary
     intro.append(richText(el('p', 'p-tagline'), lede), richText(el('p'), p.summary));
   } else intro.append(richText(el('p'), lede || p.summary));
-  buildFeature(p, d);                                   // a creative piece's own display under the title
+  if (d.embed) { const pl = el('p', 'ref-line'); pl.append(siteLink(d.embed, 'Open the live site')); intro.append(pl); }
 
   // right page: the write-up between one line of music at the top and one at the bottom
   $('#s-folio').textContent = String(3 + i);
   termsLeft = Object.entries(d.terms || {});            // underline each defined term the first time it appears
   $('#writeup').replaceChildren(...panels.map(blockFor));
   termsLeft = null;
-  setupStage(p, panels);
 
   const first = i === 0, last = i === PROJECTS.length - 1;
   projectEl.querySelector('.prev .label').textContent = first ? 'Back: Contents' : 'Back';
@@ -377,169 +356,6 @@ function fillProject(p) {
   });
 }
 
-// ---------- the frame on the right page (Works): pictures and live pieces follow the text being read ----------
-// The frame is a grainy card at the top of the page that reshapes itself to fit what it shows. Each heading,
-// and each picture under it, is an anchor in the text: when an anchor reaches the frame, its pictures appear.
-// Only headings settle into place as you scroll; pictures under the same heading simply change in the frame.
-// Anything without a picture (and the top of the page) shows the default: a dark, grainy, distorted collage.
-// On the Data Visualization page only the project names count.
-const STAGE_DEFAULT = 'images/frame-default.png';
-const STAGE_MAX_H = () => Math.min(Math.max(window.innerHeight * 0.31, 170), 330);   // the tallest the frame grows
-const stageEl = $('#stage'), stageCard = stageEl.querySelector('.stage-card'), stageFrame = stageEl.querySelector('.stage-frame'), stageView = stageEl.querySelector('.stage-view'), stageCap = $('#stage-cap');
-let stageAnchors = [], stageSections = [], stageKey = null, stageTick = false;
-function panelMedia(pn) {                               // what a panel has to show: pictures, or a live piece
-  const out = [];
-  if (pn.src) out.push({ src: pn.src, cap: pn.cap || pn.h || '', alt: pn.alt || '' });
-  (pn.figs || []).forEach(g => g.src && out.push({ src: g.src, cap: g.cap || g.fig || '', alt: g.alt || g.fig || '' }));
-  if (pn.embed && !/\.pdf$/i.test(pn.embed)) out.push({ site: pn.embed, cap: pn.embedLabel || pn.h || '' });
-  return out;
-}
-// the anchors of a write-up, in reading order: headings (which snap) and pictures (which don't)
-function mapAnchors(panels, blocks, list, onlyFolds) {
-  panels.forEach((pn, i) => {
-    const b = blocks[i];
-    if (!b) return;
-    if (pn.fold) {
-      const inner = [], body = b.querySelector('.fold-body');
-      mapAnchors(pn.panels || [], [...body.children], inner, false);
-      const media = onlyFolds ? inner.flatMap(a => a.media) : (inner.find(a => a.media.length) || { media: [] }).media;
-      list.push({ el: b, media, snap: true });
-      if (!onlyFolds) list.push(...inner);
-      return;
-    }
-    if (onlyFolds) return;
-    const media = panelMedia(pn);
-    if (pn.h) list.push({ el: b, media, snap: true });
-    else if (media.length) list.push({ el: b, media, snap: false });
-  });
-  // a heading with no pictures of its own shows the first pictures beneath it, so they appear as the heading arrives
-  list.forEach((a, k) => {
-    if (!a.snap || a.media.length) return;
-    for (let j = k + 1; j < list.length && !list[j].snap; j++) if (list[j].media.length) { a.media = list[j].media; break; }
-  });
-}
-function stageItem(it) {                                 // one picture or live piece
-  if (it.site) { const f = el('iframe'); f.src = it.site; f.title = it.cap || 'Live site'; f.loading = 'lazy'; f.setAttribute('tabindex', '-1'); return f; }
-  const im = el('img'); im.src = it.src; im.alt = it.alt || ''; im.decoding = 'async';
-  im.addEventListener('error', () => im.replaceWith(el('span', 'photo-missing', 'Picture not found')));
-  return im;
-}
-// the card's new shape: as wide as the pictures need at the frame's height, never wider than the page
-function fitStage(view, media) {
-  const W = stageEl.clientWidth, Hmax = STAGE_MAX_H(), capH = stageCap.textContent ? 40 : 14, pad = 28, gap = 8;
-  const size = aspect => { const h = Math.min(Hmax, (W - pad) / aspect); stageCard.style.width = Math.min(W, h * aspect + pad) + 'px'; stageCard.style.height = (h + pad + capH) + 'px'; };
-  if (!media.length) return size(1024 / 576);
-  if (media.some(m => m.site)) return size(16 / 10);
-  const imgs = [...view.querySelectorAll('img')];
-  const done = () => {
-    const ratios = imgs.map(im => im.naturalWidth && im.naturalHeight ? im.naturalWidth / im.naturalHeight : 1.5);
-    if (ratios.length > 3) { const rows = 2, per = Math.ceil(ratios.length / rows); size(Math.max(...ratios) * per / rows); }
-    else size(ratios.reduce((a, r) => a + r, 0) + gap * (ratios.length - 1) / Hmax);
-  };
-  if (imgs.every(im => im.complete)) done(); else Promise.all(imgs.map(im => im.decode().catch(() => {}))).then(() => { if (view.isConnected) done(); });
-}
-function showStage(media) {
-  const key = media.length ? media.map(m => m.src || m.site).join('|') : 'default';
-  if (key === stageKey) return;
-  stageKey = key;
-  const view = el('div', 'stage-set' + (media.length > 3 ? ' many' : ''));
-  stageFrame.classList.toggle('is-default', !media.length);
-  if (media.length) media.forEach(m => view.append(stageItem(m)));
-  else { const im = el('img'); im.src = STAGE_DEFAULT; im.alt = ''; view.append(im); }
-  const old = [...stageView.children];
-  stageView.append(view);
-  const caps = media.map(m => m.cap).filter(Boolean);
-  stageCap.textContent = caps.length ? [...new Set(caps)].join('  ·  ') : '';
-  fitStage(view, media);
-  requestAnimationFrame(() => { view.classList.add('in'); old.forEach(o => { o.classList.remove('in'); setTimeout(() => o.remove(), 700); }); });
-}
-function updateStage() {                                 // the last anchor to reach the frame is the one being read
-  stageTick = false;
-  if (!projectEl.classList.contains('is-work') || projectEl.hidden) return;
-  const line = stageEl.getBoundingClientRect().top + STAGE_MAX_H() + window.innerHeight * 0.026 + 76 + 30, page = projectEl.querySelector('.page.right');
-  const atEnd = page.scrollHeight > page.clientHeight && page.scrollTop + page.clientHeight >= page.scrollHeight - 4;
-  let active = null;
-  stageAnchors.forEach(a => {
-    if (a.el.offsetParent === null) return;               // inside a closed dropdown
-    const top = a.el.getBoundingClientRect().top;
-    if (top <= line || (atEnd && top < window.innerHeight * 0.8)) active = a;   // at the very end, the last anchor on screen counts
-  });
-  showStage(active ? active.media : []);
-}
-function setupStage(p, panels) {
-  stageAnchors = []; stageKey = null; stageView.replaceChildren(); stageCap.textContent = '';
-  $('#writeup').querySelectorAll('.snap').forEach(b => b.classList.remove('snap'));
-  if (p.group !== 'Works') return;
-  mapAnchors(panels, [...$('#writeup').children], stageAnchors, p.id === 'work-6');
-  stageSections = stageAnchors.filter(a => a.snap);
-  stageSections.forEach((a, i) => { if (i) a.el.classList.add('snap'); });   // headings after the first settle gently into place
-  showStage([]);
-  requestAnimationFrame(updateStage);
-}
-const onStageScroll = () => { if (!stageTick) { stageTick = true; requestAnimationFrame(updateStage); } };
-projectEl.querySelector('.page.right').addEventListener('scroll', onStageScroll, { passive: true });
-window.addEventListener('scroll', onStageScroll, { passive: true });
-window.addEventListener('resize', () => { if (stageKey !== null) { const k = stageKey; stageKey = null; updateStage(); if (stageKey === null) stageKey = k; } });
-document.addEventListener('click', e => { if (e.target.closest('.fold-toggle, .fold-title')) setTimeout(updateStage, 60); });
-(function drawStageGrain() {                             // a film of grain over the frame (heavier on the default picture)
-  const cv = stageEl.querySelector('.stage-grain'), g = cv.getContext('2d');
-  cv.width = 420; cv.height = 280;
-  const img = g.createImageData(420, 280);
-  for (let i = 0; i < img.data.length; i += 4) { const v = Math.random() * 255 | 0; img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 70; }
-  g.putImageData(img, 0, 0);
-})();
-
-// ---------- a creative piece's own display, under the title on the left page ----------
-// Digital Fashion: its magazine PDF. Magazine Templates: a frame for template spreads. Film Analysis: the poster
-// and details of the film whose paper is open on the right.
-function buildFeature(p, d) {
-  const box = $('#p-feature');
-  box.replaceChildren(); box.hidden = true;
-  projectEl.classList.remove('has-film');
-  if (d.pdf) {
-    const o = el('object', 'pdf-embed'); o.data = d.pdf; o.type = 'application/pdf';
-    const fb = el('p', 'pdf-missing');
-    fb.append('The PDF isn’t here yet. ', Object.assign(el('a', 'ext-link', 'Open it ↗'), { href: d.pdf, target: '_blank', rel: 'noopener' }));
-    o.append(fb); box.append(o); box.hidden = false;
-  } else if (d.spreads) {
-    box.append(spreadViewer(d.spreads)); box.hidden = false;
-  } else if (d.films) {
-    projectEl.classList.add('has-film');
-    box.hidden = false;
-    showFilm(d.films[0].id);
-  }
-}
-function spreadViewer(list) {                            // template spreads, one at a time, in a two-page frame
-  const wrap = el('div', 'spreads'), frame = el('div', 'spread-frame'), bar = el('div', 'spread-bar');
-  let i = 0;
-  const show = () => {
-    frame.replaceChildren();
-    if (!list.length) { frame.append(el('p', 'spread-empty', '[Template spreads: add the pictures to DETAILS[\'creative-3\'].spreads in content.js]')); return; }
-    const s = list[i], im = el('img'); im.src = s.src || s; im.alt = s.cap || 'Template spread ' + (i + 1);
-    frame.append(im);
-    bar.querySelector('.count').textContent = (s.cap ? s.cap + '  ·  ' : '') + (i + 1) + ' of ' + list.length;
-  };
-  const btn = (label, d) => { const b = el('button', 'brace literal'); b.type = 'button'; b.append(el('span', 'b', '{'), el('span', 'label', label), el('span', 'b', '}')); b.addEventListener('click', () => { i = (i + d + list.length) % list.length; show(); }); return b; };
-  if (list.length > 1) bar.append(btn('Previous', -1), el('span', 'count'), btn('Next', 1)); else bar.append(el('span', 'count'));
-  wrap.append(frame, bar); show();
-  return wrap;
-}
-function showFilm(id) {                                  // the film's poster and details on the left page
-  const d = DETAILS['creative-4'] || {}, f = (d.films || []).find(x => x.id === id);
-  if (!f) return;
-  const box = $('#p-feature'), card = el('div', 'film');
-  const poster = el('div', 'poster');
-  const im = el('img'); im.src = f.poster; im.alt = 'Poster for ' + f.title;
-  im.addEventListener('error', () => { poster.classList.add('empty'); im.replaceWith(el('span', 'poster-title', f.title)); });
-  poster.append(im);
-  const info = el('div', 'film-info');
-  info.append(el('p', 'film-title', f.title), el('p', 'film-meta', `Directed by ${f.director}  ·  ${f.year}`), el('p', 'film-blurb', f.blurb));
-  card.append(poster, info);
-  const old = box.firstChild;
-  box.append(card);
-  requestAnimationFrame(() => { card.classList.add('in'); if (old) { old.classList.remove('in'); setTimeout(() => old.remove(), 500); } });
-}
-
 // ---------- dropdowns opening and closing ----------
 function toggleFold(btn) {
   const body = document.getElementById(btn.getAttribute('aria-controls'));
@@ -548,8 +364,6 @@ function toggleFold(btn) {
   btn.querySelector('.label').textContent = open ? 'Close' : 'Open';
   btn.querySelector('.caret').textContent = open ? '\u25B4' : '\u25BE';
   body.hidden = !open;
-  const film = btn.closest('.fold')?.dataset.film;
-  if (open && film) showFilm(film);                      // the film's poster and details appear on the left page
   // dotted text is drawn where the browser put it, so the write-up is laid out again around the fold
   projectText.forEach(s => {
     if (!s.el.closest('.page.right')) return;
@@ -570,7 +384,7 @@ projectEl.addEventListener('click', e => {
 
 // ---------- the hover preview ----------
 const card = $('#hovercard'), cardBody = card.querySelector('.hc-body'), cardGrain = card.querySelector('.hc-grain');
-const CARD_SHADE_OUT = 30, CARD_SHADE_IN = 8;   // the preview's edge: wide and soft, so it reads as a shadow, not a torn edge
+const CARD_SHADE_OUT = 14, CARD_SHADE_IN = 7;
 let cardRef = null, showTimer = null, hideTimer = null;
 function cardFigure(it) {
   const f = el('figure', 'hc-fig');
@@ -659,7 +473,7 @@ function placeCard() {
   card.style.left = left + 'px'; card.style.top = top + 'px';
   const M = CARD_SHADE_OUT;
   Object.assign(cardGrain.style, { left: -M + 'px', top: -M + 'px', width: (cw + M * 2) + 'px', height: (ch + M * 2) + 'px' });
-  if (cardGrain._size !== cw + 'x' + ch) { cardGrain._size = cw + 'x' + ch; drawEdgeGrain(cardGrain, cw, ch, M, CARD_SHADE_IN, true); }
+  if (cardGrain._size !== cw + 'x' + ch) { cardGrain._size = cw + 'x' + ch; drawEdgeGrain(cardGrain, cw, ch, M, CARD_SHADE_IN); }
 }
 function showCard(ref) {
   clearTimeout(hideTimer);
@@ -741,7 +555,6 @@ function layoutProject() {
   projectText.forEach(layoutText);
   projectShades.forEach(layoutShade);
   layoutProjectOrnament(projOrnament);
-  layoutRightOrnament(rightOrnament);
   updatePositions();
 }
 // Engrave the music ahead of time, while the cover or opening spread is showing, so the first piece opens quickly.
@@ -895,8 +708,8 @@ function acanthus(cx, cy, size, rot, flip, wid, a = 0.8) {
 function seedHead(cx, cy, n, c, a) { SPIRAL.fermat(n, c).forEach(([x, y], i) => { if (i % 3) ring(cx + x, cy + y, 1.5, a * 0.8); else cluster(cx + x, cy + y, 0.9, 0.7); }); }
 
 // A corner flourish, from (ox, oy) inward (sx, sy = ±1), reaching about S px along each edge
-function flourishCorner(ox, oy, sx, sy, S, a = 0.82, kx = 1, ky = 1) {
-  const P = (u, v) => [ox + sx * u * S * kx, oy + sy * v * S * ky];
+function flourishCorner(ox, oy, sx, sy, S, a = 0.82) {
+  const P = (u, v) => [ox + sx * u * S, oy + sy * v * S];
   const flip = sx * sy, dirA = Math.atan2(sy, sx);
   // the great swoop: in along the top edge, dipping into a loop at the corner, then away down the side
   const swoop = chain([P(1.25, 0.05), P(0.95, -0.02), P(0.6, 0.02), P(0.34, 0.12),
@@ -979,31 +792,18 @@ function layoutCoverArt(s) {
   }
   finish(s, w, h);
 }
-// the project pages: on the left page, a flourish rising from the bottom-left corner (it stops short of the
-// contacts) and a small frame around the live-site link; on the right page, one at the top-right corner
-const PROJECT_CORNER = 0.34;   // the bottom-left flourish's size, as a share of the page's width
-function layoutProjectOrnament(s) {                    // the left page has no flourish: the line of music is its ornament
-  const c = s.canvas, box = c.parentElement, w = box.clientWidth;
+// the project pages: a lighter, smaller version at two corners of the left page; it scrolls with the page
+function layoutProjectOrnament(s) {
+  const c = s.canvas, box = c.parentElement;
   c.style.height = '0px';
-  if (!w) return;
-  begin(w); finish(s, w, 1);
-}
-function layoutRightOrnament(s) {
-  const c = s.canvas, w = c.parentElement.clientWidth, S = Math.min(w * 0.2, 130), h = Math.ceil(S * 1.7);
+  const w = box.clientWidth, h = box.scrollHeight;
   c.style.height = h + 'px';
-  if (!w) return;
+  if (!w || !h) return;
   begin(w);
+  const S = Math.min(w * 0.17, 120);
   flourishCorner(w - 6, 6, -1, 1, S, 0.55);
+  flourishCorner(6, h - 6, 1, -1, S * 0.85, 0.5);
   finish(s, w, h);
-}
-// a small engraved frame: wavering rules, Archimedean curls at the corners, a dot at each side
-function miniFrame(r, a) {
-  const pad = 10, x0 = r.x - pad, y0 = r.y - pad * 0.6, x1 = r.x + r.w + pad, y1 = r.y + r.h + pad * 0.6;
-  const rule = (ax, ay, bx, by) => { const pts = [], L = Math.hypot(bx - ax, by - ay); for (let d = 0; d <= L; d += 2) { const t = d / L; pts.push([ax + (bx - ax) * t, ay + (by - ay) * t + Math.sin(t * TAU * Math.max(2, L / 40)) * (ay === by ? 1.6 : 0)]); } inkPath(pts, 0.9, 0.9, a); };
-  rule(x0 + 12, y0, x1 - 12, y0); rule(x0 + 12, y1, x1 - 12, y1);
-  rule(x0, y0 + 10, x0, y1 - 10); rule(x1, y0 + 10, x1, y1 - 10);
-  [[x0, y0, 1], [x1, y0, -1], [x0, y1, -1], [x1, y1, 1]].forEach(([x, y, d]) => curl(x, y, 7, 1.5, d > 0 ? 0 : Math.PI, d, 1, a));
-  [[x0 - 10, (y0 + y1) / 2], [x1 + 10, (y0 + y1) / 2]].forEach(([x, y]) => { ring(x, y, 2.2, a); cluster(x, y, 1, 0.8); });
 }
 
 // ---------- the restated title: an engraver's filigree frame around the title block only (like an old book cover) ----------

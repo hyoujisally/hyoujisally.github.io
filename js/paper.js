@@ -64,7 +64,7 @@ function layoutShade(s) {
   // on phones the pages stack, and the cover is a single page: neither has a spine, just shaded edges all round
   const stacked = window.innerWidth <= 900 || !!s.canvas.closest('.cover-page');
   const spineOnRight = !!s.canvas.closest('.page.left');
-  const spineW = clamp(w * 0.17, 76, 170), outerW = clamp(w * 0.12, 50, 130), capH = 70;   // spineW: how far the shading at the fold reaches
+  const spineW = clamp(w * 0.2, 90, 200), outerW = clamp(w * 0.12, 50, 130), capH = 70;
   const fall = (d, size) => d >= size ? 0 : Math.pow(1 - d / size, 2.2);   // 1 at the edge, 0 once `size` away
   // the shading is a sum of a part that depends only on the column and a part that depends only on the row,
   // so each is worked out once and looked up
