@@ -515,9 +515,7 @@ DETAILS['work-3'] = {
         ['Team', 'Rosie Nguyen, Hyouji Joo, Cheryl Nguyen, Reese Odvina'],
         ['Role', 'Concept Lead · UX/UI Designer'],
         ['Context', 'FigBuild 2026 · 3-day hackathon'],
-        ['Prompt', 'Identify something intangible, invisible, or previously unmeasurable about the human sensory experience and design a speculative tool to track and influence it. This tool should be designed to support a wellness goal or behavioral change for an individual or a group.'],
         ['Built with', 'Figma, Figma Make, Claude, React, JavaScript, HTML, CSS'],
-        ['Target users', 'Any users navigating stress, transition, and identity, particularly those often reflecting on the past to experience certain emotions again']
       ],
       p: ['Polaris is a memory visualization tool that turns personal experiences into a constellation of emotional and sensory signals. The “new” sense we chose to track is nostalgic resonance: the emotional signal created when memories share similar sensory environments and feelings.'
       ]
@@ -530,7 +528,7 @@ DETAILS['work-3'] = {
           ] },
         { t: 'Visual system', items: [
             'Designed the emotion-color system, icons, and memory orbs.',
-            'Specified an orb PNG generator (built with AI assistance) that outputs all 41 emotion combinations.'
+            'Specified an orb PNG generator that outputs all 41 emotion combinations.'
           ] },
         { t: 'Wireframing and layout', items: [
             'Led wireframing and page layout.',
