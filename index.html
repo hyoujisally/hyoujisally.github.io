@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio, Op. 1 · Hyouji Sally Joo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400;1,600;1,700&family=Bodoni+Moda:opsz,wght@6..96,500;6..96,700&family=Noto+Music&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/portfolio.css">
+</head>
+<body>
+<main>
+
+  <!-- ===================== THE COVER SPREAD: the cover on the left; its ornament and a hand-drawn staff spill over onto the right page ===================== -->
+  <div class="spread" id="cover">
+    <canvas class="ornament cover-art" aria-hidden="true"></canvas>
+    <article class="page left cover-page" aria-label="Cover">
+      <canvas class="shade" aria-hidden="true"></canvas>
+      <div class="cover-inner">
+        <p class="cover-name ink-text grain-full">Hyouji Sally Joo</p>
+        <h1 class="cover-title ink-text">Portfolio</h1>
+        <p class="cover-op ink-text grain-full">Op. 1</p>
+        <p class="cover-score ink-text grain-full">Selected Works</p>
+      </div>
+    </article>
+
+    <div class="right-frame">
+      <article class="page right cover-bleed" aria-label="Cover, continued">
+        <canvas class="shade" aria-hidden="true"></canvas>
+        <div class="right-inner cover-bleed-inner">
+          <footer class="contacts cover-contacts">
+          <p class="ink-text"><span class="c-label">Personal:</span> <a href="mailto:sallyjoo18@gmail.com">sallyjoo18@gmail.com</a></p>
+          <p class="ink-text"><span class="c-label">School:</span> <a href="mailto:hyoujijoo2027@u.northwestern.edu">hyoujijoo2027@u.northwestern.edu</a></p>
+          <p class="ink-text"><span class="c-label">LinkedIn:</span> <a href="https://linkedin.com/in/hyoujijoo">linkedin.com/in/hyoujijoo</a></p>
+          <p class="ink-text"><span class="c-label">GitHub:</span> <a href="https://github.com/hyoujisally">github.com/hyoujisally</a></p>
+        </footer>
+          <nav class="turn-page ready landing-next" aria-label="Continue">
+            <a class="brace literal next ink-text" href="#" data-go="about"><span class="b">{</span><span class="label">Next</span><span class="b">}</span></a>
+          </nav>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <!-- ===================== THE ABOUT SPREAD: the title restated on the left, framed like an old book cover; about on the right ===================== -->
+  <div class="spread" id="about" hidden>
+    <article class="page left halftitle" aria-label="Portfolio">
+      <canvas class="shade" aria-hidden="true"></canvas>
+      <canvas class="ornament" aria-hidden="true"></canvas>
+      <div class="halftitle-inner">
+        <div class="halftitle-block">
+          <h1 class="ht-title ink-text">Portfolio</h1>
+        </div>
+        <footer class="cover-imprint contacts">
+          <p class="ink-text"><span class="c-label">Personal:</span> <a href="mailto:sallyjoo18@gmail.com">sallyjoo18@gmail.com</a></p>
+          <p class="ink-text"><span class="c-label">School:</span> <a href="mailto:hyoujijoo2027@u.northwestern.edu">hyoujijoo2027@u.northwestern.edu</a></p>
+          <p class="ink-text"><span class="c-label">LinkedIn:</span> <a href="https://linkedin.com/in/hyoujijoo">linkedin.com/in/hyoujijoo</a></p>
+          <p class="ink-text"><span class="c-label">GitHub:</span> <a href="https://github.com/hyoujisally">github.com/hyoujisally</a></p>
+        </footer>
+      </div>
+    </article>
+
+    <div class="right-frame">
+      <article class="page right about-right" aria-label="About">
+        <canvas class="shade" aria-hidden="true"></canvas>
+        <div class="right-inner about-inner">
+          <h2 class="about-title ink-text" id="about-title">About</h2>
+          <div class="about-blurb" id="about-blurb"></div>
+          <nav class="turn-page ready landing-next" aria-label="Continue">
+            <a class="brace literal prev ink-text" href="#" data-go="home"><span class="b">{</span><span class="label">Back</span><span class="b">}</span></a>
+            <a class="brace literal next ink-text" href="#" data-go="contents"><span class="b">{</span><span class="label">Next: Contents</span><span class="b">}</span></a>
+          </nav>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <!-- ===================== THE CONTENTS SPREAD: navigation and contacts on the left, contents on the right ===================== -->
+  <div class="spread" id="home" hidden>
+    <article class="page left index-page" aria-label="Navigation">
+      <canvas class="shade" aria-hidden="true"></canvas>
+      <div class="left-inner">
+        <nav class="call-number" aria-label="Sections">
+          <a class="brace literal ink-text" href="#" data-go="home"><span class="b">{</span><span class="label">Home</span><span class="b">}</span></a>
+          <a class="brace literal ink-text" href="#" data-go="contents"><span class="b">{</span><span class="label">Contents</span><span class="b">}</span></a>
+          <div class="menu">
+            <button class="brace literal works-toggle ink-text" type="button" aria-expanded="false"><span class="b">{</span><span class="label">Works</span><span class="caret" aria-hidden="true">&#x25BE;</span><span class="b">}</span></button>
+            <ul class="works-menu" hidden></ul>
+            <canvas class="menu-grain" aria-hidden="true" hidden></canvas>
+          </div>
+        </nav>
+        <footer class="imprint contacts">
+          <p class="ink-text"><span class="c-label">Personal:</span> <a href="mailto:sallyjoo18@gmail.com">sallyjoo18@gmail.com</a></p>
+          <p class="ink-text"><span class="c-label">School:</span> <a href="mailto:hyoujijoo2027@u.northwestern.edu">hyoujijoo2027@u.northwestern.edu</a></p>
+          <p class="ink-text"><span class="c-label">LinkedIn:</span> <a href="https://linkedin.com/in/hyoujijoo">linkedin.com/in/hyoujijoo</a></p>
+          <p class="ink-text"><span class="c-label">GitHub:</span> <a href="https://github.com/hyoujisally">github.com/hyoujisally</a></p>
+        </footer>
+      </div>
+    </article>
+
+    <div class="right-frame">
+      <article class="page right" aria-label="Contents">
+        <canvas class="shade" aria-hidden="true"></canvas>
+        <div class="right-inner">
+          <header class="sheet-head">
+            <h2 class="sheet-title ink-text grain-full">Contents</h2>
+            <p class="sheet-sub ink-text">(Portfolio)</p>
+            <p class="sheet-by ink-text">By Hyouji Sally Joo.</p>
+          </header>
+          <section class="toc-group" id="toc-works" aria-labelledby="toc-works-h">
+            <h3 id="toc-works-h" class="ink-text grain-full">Works</h3>
+            <ol class="toc" id="toc-works-list"></ol>
+          </section>
+          <section class="toc-group" id="toc-creatives" aria-labelledby="toc-creatives-h">
+            <h3 id="toc-creatives-h" class="ink-text grain-full">Creatives</h3>
+            <ol class="toc" id="toc-creatives-list"></ol>
+          </section>
+          <nav class="turn-page ready" aria-label="Back">
+            <a class="brace literal ink-text" href="#" data-go="about"><span class="b">{</span><span class="label">Back</span><span class="b">}</span></a>
+            <span class="folio ink-text">3</span>
+          </nav>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <!-- ===================== A PROJECT'S SPREAD: details on the left, the write-up on the right ===================== -->
+  <div class="spread" id="project" hidden>
+    <article class="page left project-ref" aria-label="Project at a glance">
+      <canvas class="shade" aria-hidden="true"></canvas>
+      <div class="left-inner">
+        <canvas class="ornament proj-ornament" aria-hidden="true"></canvas>
+        <nav class="call-number" aria-label="Sections">
+          <a class="brace literal" href="#" data-go="home"><span class="b">{</span><span class="label">Home</span><span class="b">}</span></a>
+          <a class="brace literal" href="#" data-go="contents"><span class="b">{</span><span class="label">Contents</span><span class="b">}</span></a>
+          <div class="menu">
+            <button class="brace literal works-toggle" type="button" aria-expanded="false"><span class="b">{</span><span class="label">Works</span><span class="caret" aria-hidden="true">&#x25BE;</span><span class="b">}</span></button>
+            <ul class="works-menu" hidden></ul>
+            <canvas class="menu-grain" aria-hidden="true" hidden></canvas>
+          </div>
+        </nav>
+        <header class="title-page">
+          <h1 id="p-title">Project</h1>
+          <p class="paren" id="p-sub"></p>
+          <p class="opus" id="p-no"></p>
+        </header>
+        <div class="p-feature" id="p-feature" hidden></div>
+        <div class="line">
+          <div class="tempo-row">
+            <p class="tempo">Adagio cantabile<span class="mm">(<span class="music">&#x2669;</span> = 40)</span></p>
+            <button id="play" class="brace literal" type="button" aria-pressed="false"><span class="b">{</span><span class="label">Play</span><span class="b">}</span></button>
+          </div>
+          <canvas id="line1" role="img" aria-label="Engraved score, the opening bars of the second movement of Beethoven’s Pathétique sonata."></canvas>
+        </div>
+        <section class="p-info" aria-label="Project details">
+          <dl class="p-facts" id="p-facts"></dl>
+          <div class="p-intro" id="p-intro"></div>
+        </section>
+        <!-- the contact links: a footer on every project page -->
+        <footer class="imprint contacts">
+          <p><span class="c-label">Personal:</span> <a href="mailto:sallyjoo18@gmail.com">sallyjoo18@gmail.com</a></p>
+          <p><span class="c-label">School:</span> <a href="mailto:hyoujijoo2027@u.northwestern.edu">hyoujijoo2027@u.northwestern.edu</a></p>
+          <p><span class="c-label">LinkedIn:</span> <a href="https://linkedin.com/in/hyoujijoo">linkedin.com/in/hyoujijoo</a></p>
+          <p><span class="c-label">GitHub:</span> <a href="https://github.com/hyoujisally">github.com/hyoujisally</a></p>
+        </footer>
+      </div>
+    </article>
+
+    <div class="right-frame">
+      <article class="page right" aria-label="Project write-up">
+        <canvas class="shade" aria-hidden="true"></canvas>
+        <div class="right-inner">
+          <div class="snap-top" aria-hidden="true"></div>
+          <canvas class="ornament right-orn" aria-hidden="true"></canvas>
+          <!-- the frame: pictures and live pieces for the section being read (Works only) -->
+          <div class="stage" id="stage" aria-live="polite">
+            <div class="stage-card">
+              <div class="stage-frame">
+                <div class="stage-view"></div>
+                <canvas class="stage-grain" aria-hidden="true"></canvas>
+                <p class="stage-cap" id="stage-cap"></p>
+              </div>
+            </div>
+          </div>
+          <div class="slot" id="writeup"></div>
+          <nav class="turn-page" aria-label="More pieces">
+            <a class="brace literal prev" href="#" data-go="prev"><span class="b">{</span><span class="label">Back</span><span class="b">}</span><span class="next-title" id="prev-title"></span></a>
+            <a class="brace literal next" href="#" data-go="next"><span class="b">{</span><span class="label">Next</span><span class="b">}</span><span class="next-title" id="next-title"></span></a>
+          </nav>
+          <footer class="page-foot">
+            <span>Beethoven, Piano Sonata No. 8 in C minor, Op. 13 “Pathétique”, second movement</span>
+            <span class="folio" id="s-folio">3</span>
+          </footer>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <div class="hovercard" id="hovercard" role="tooltip" hidden>
+    <canvas class="hc-grain" aria-hidden="true"></canvas>
+    <div class="hc-body"></div>
+  </div>
+
+  <svg class="defs" width="0" height="0" aria-hidden="true" style="position:absolute">
+    <filter id="stage-distort"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G"/></filter>
+  </svg>
+  <canvas class="turn" aria-hidden="true"></canvas>
+  <div class="turn-grain" aria-hidden="true"></div>
+</main>
+
+<script src="js/settings.js"></script>
+<script src="js/score.js"></script>
+<script src="js/ink.js"></script>
+<script src="js/engraving.js"></script>
+<script src="js/paper.js"></script>
+<script src="js/sound.js"></script>
+<script src="js/turn.js"></script>
+<script src="js/content.js"></script>
+<script src="js/views.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
