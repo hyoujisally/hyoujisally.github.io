@@ -41,9 +41,10 @@ const PROJECTS = [
 const ABOUT = {
   title: 'About',
   paragraphs: [
-    'Hello, my name is Hyouji (or Sally) Joo. I’d like to describe myself as a data-driven thinker with a creative heart and a passion for empathetic design. I love finding the stories behind numbers, understanding how people think, and translating abstract ideas into intuitive, meaningful, and empathetic digital experiences.',
+    'Hello, my name is Hyouji (or Sally) Joo. I’d like to describe myself as a data-driven thinker with a creative heart and a passion for empathetic design.', 
+    'I love finding the stories behind numbers, understanding how people think, and translating abstract ideas into intuitive, meaningful, and empathetic digital experiences.',
+    'I believe that anything can become an experience, as long as you can balance practicality, user consideration, and creative indulgence.',
     'Beyond design, I am a music enthusiast (as you can see from the music score page design), art lover, and a hobby collector.',
-    'I think of the music score as a metaphor for how projects of different natures can form a cohesive story, similar to how there are multiple movements in a musical piece.'
   ]
 };
 
